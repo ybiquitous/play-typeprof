@@ -11,4 +11,6 @@ jobs:
         with:
           ruby-version: 2.7
       - run: gem install typeprof
-      - run: typeprof --verbose hello.rb
+      - run: |
+          typeprof --verbose *.rb | ruby -pe 'sub(/^(.+):(\d+): (.+)$/, %q{::error file=\1,line=\2,col=1::\3})'
+        shell: bash

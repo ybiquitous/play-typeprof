@@ -1,0 +1,16 @@
+name: Type-check
+
+on: [push]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+      - run: gem install typeprof
+      - run: |
+          typeprof --verbose *.rb | ruby -pe 'sub(/^(.+):(\d+): (.+)$/, %q{::error file=\1,line=\2,col=1::\3})'
+        shell: bash
